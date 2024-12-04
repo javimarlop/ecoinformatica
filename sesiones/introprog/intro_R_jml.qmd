@@ -1,0 +1,495 @@
+---
+title: "Primeros pasos con R"
+format: html
+number-sections: false
+number-depth: 4
+date: "`r Sys.Date()`"
+sesion: x
+author: 
+  - name: "Javier Martínez-López"
+    orcid: 0000-0002-0825-7252
+    email: javier.martinez@ugr.es
+    affiliation: Departamento de Ecología, Universidad de Granada
+crossref:
+  fig-title: Figura     # (default is "Figure")
+  tbl-title: Tabla     # (default is "Table")
+  title-delim: .     # (default is ":")
+  fig-prefix: Figura
+  tbl-prefix: Tabla
+  ref-hyperlink: true
+  sec-prefix: ""
+  sec-labels: alpha
+---
+
+# Introducción a R {.unnumbered}
+
+## ¿Qué es **R**?
+
+> [R](http://cran.r-project.org) es un **lenguaje de programación** principalmente orientado al análisis estadístico y visualización de información cuantitativa y cualitativa y publicado como **software libre**.
+
+## [Librerías](https://cran.r-project.org/web/packages/)
+
+* Las funciones se agrupan por paquetes o librerías
+* Las Funciones más habituales se incluyen por defecto en R (base)
+* Las librerías se pueden instalar y cargar fácilmente (install.packages() y library())
+
+## Librerías
+
+Por ejemplo [labdsv](https://cran.r-project.org/web/packages/labdsv/index.html)
+
+```{r, eval=FALSE}
+install.packages('labdsv')
+
+library(labdsv)
+
+library(help=labdsv)
+```
+
+Hay conjuntos de librerías según su temática llamadas [Task Views](http://cran.r-project.org/web/views)
+
+## Fuentes de información
+
+* [Manuales oficiales](https://cran.r-project.org/manuals.html)
+* [Manuales externos](https://cran.r-project.org/other-docs.html)
+* [Listas de correo](http://www.r-project.org/mail.html)
+* [R-bloggers](http://www.r-bloggers.com)
+* [Comunidad R-Hispano](http://r-es.org/)
+* [Apuntes de Luís Cayuela](http://luiscayuela.blogspot.com.es/)
+
+
+## Ayuda
+
+```{r}
+help("aov") ## Ayuda sobre una función
+
+help('+') ## Ayuda sobre operadores
+
+help.search('linear model') ## Búsqueda de palabras clave
+```
+
+# Elementos de R
+
+## Variables, constantes y operadores
+
+```{r}
+a <- 3.25
+
+a = 3.25
+
+nombre <- 'Pepe'
+```
+```{r}
+as.Date('2000-01-01')
+
+as.Date('2000-01-01') + 2 
+```
+
+### Constantes
+
+```{r}
+NULL ## vector, matriz,  vacíos
+
+NA ## celdilla sin valor
+
+NaN ## valor no numérico  (ejm. 1/0=inf)
+
+pi ## ya definidas
+```
+
+### Operadores
+
+```{r}
+a == 3.25
+
+a == 6
+
+nombre != 'Juan'
+
+nombre == 'Pepe'
+
+a != 2
+
+5 < 6
+
+10 >= 5
+```
+
+#### Operadores aritméticos
+
+```{r}
+1 + 2
+
+1 - 2
+
+5 / 3
+
+2 ^ {3}
+
+sqrt(10)
+```
+
+## Vectores
+
+```{r}
+a <- NULL # vector vacío
+
+a <- 1:10 # 1 2 3 4 5 6 7 8 9 10
+
+c <- seq(1, 10, by = 0.5) # 1 1.5 2 ... 9.5 10
+
+d <- c(0, 1, 1, 2, 3) # 0 1 1 2 3
+
+e <- c('b1', 'b2', 'b3') #  'b1' 'b2' 'b3'
+
+f <- rep(5, 6) # 5 5 5 5 5 5
+
+d[1] # el primer dato del vector 0
+
+d[-1] # todos los datos del vector menos el primero 1 1 2 3
+```
+
+## Matrices
+
+```{r}
+mat <- matrix(1:12, 3, 4) # valores del 1 al 12, 3 filas y 4 columnas
+
+rbind(1:5, 11:15, 21:25) # unir filas
+
+cbind(1:5, 11:15, 21:25) # unir columnas
+
+mat[1:2, 2:3] # selección de valores: filas 1 y 2 columnas 2 y 3
+
+mat[, -2] # selección de toda la matriz excepto la columna 2
+
+t(mat) # transponer la matriz
+```
+
+## Data frames
+
+```{r}
+mat <- matrix(1:30, 10) ## valores del 1 al 30 agrupados de 10 en 10 (10 filas 3 columnas)
+
+df_mat <- as.data.frame(mat) ## convertir a 'data.frame'
+```
+
+```{r}
+names(df_mat) # nombres de las variables
+
+df_mat[2, 1] # seleccionar un elemento (fila 2 columna 1)
+
+df_mat$V1 # seleccionar una variable (columna 1)
+```
+
+# Gestión del espacio de trabajo
+
+```{r, eval=FALSE}
+data(cars) ## cargar datos ejemplo
+
+ls()
+
+rm()
+
+rm(a)
+
+rm(list = ls())
+```
+
+# Importar y manejar mis datos
+
+```{r}
+data(iris)
+
+# iris
+
+head(iris)
+
+tail(iris)
+
+dim(iris)
+
+names(iris)
+
+attach(iris)
+
+by(Sepal.Length, Species, summary) 
+
+head(Sepal.Length)
+
+# detach(iris)
+```
+
+## Primeros pasos
+
+```{r}
+names(df_mat)
+
+names(df_mat) <- c('B1', 'B2', 'B3')
+
+rownames(df_mat)
+
+rownames(df_mat) <- LETTERS[1:10]
+
+head(df_mat)
+```
+
+## Seleccionar de mis datos
+
+```{r}
+iris[, 1]
+
+iris[1:6, -1]
+
+iris[1:3, ]
+
+iris[-1:-140, ]
+
+iris[1:6, c(1, 3)]
+
+iris[1:6, -c(1, 3)] 
+```
+
+## Estadísticos básicos
+
+```{r}
+table(Species) # Tabla de contingencia
+
+summary(iris) # check
+
+summary(cars)
+
+sd(iris$Sepal.Length)
+```
+
+## Exportar datos
+
+```{r, eval=FALSE}
+write.table(df_mat,'df_mat.csv',
+            sep=';',
+            dec=',',
+            col.names=TRUE,
+            row.names=FALSE)
+```
+
+#  Funciones 
+
+nombre_fun<-function(argumentos){expresion}
+
+```{r}
+di_hola_mundo <- function() {
+  print('¡Hola Mundo!')
+}
+
+di_hola_mundo()
+```
+
+```{r}
+a_euros <- function(pesetas) {
+  pesetas / 166.386
+}
+
+a_euros(1000)
+
+a_pesetas <- function(euros) {
+  euros * 166.386
+}
+
+a_pesetas(6)
+```
+
+## ¿Cómo se haría la función 'Área del triángulo'?
+
+```{r}
+area.triangulo <- function(b = 3, h = 5) {
+  b * h / 2
+}
+
+area.triangulo()
+
+area.triangulo(b = 4)
+```
+
+# Gráficos básicos
+
+```{r}
+plot(
+  x = 1:10,
+  y = 1:10,
+  xlab = 'eje X',
+  ylab = 'eje Y',
+  main = 'Título'
+)
+
+plot(
+  x = 1:10,
+  y = 1:10,
+  type = 'l',
+  xlab = 'eje X',
+  ylab = 'eje Y',
+  main = 'Título'
+)
+
+plot(
+  x = 1:10,
+  y = 1:10,
+  type = 'o',
+  xlab = 'eje X',
+  ylab = 'eje Y',
+  main = 'Título'
+)
+```
+
+```{r}
+plot(
+  x = 1:10,
+  y = 1:10,
+  xlab = 'eje X',
+  ylab = 'eje Y',
+  main = 'Título'
+)
+```
+
+## Leyendas 
+
+```{r}
+plot(
+  Sepal.Length,
+  Petal.Length,
+  col = as.factor(Species),
+  xlab = 'Long. Sépalo',
+  ylab = 'Long. Pétalo'
+)
+
+legend(7,
+       3,
+       col = c(1:3),
+       pch = 1,
+       legend = unique(Species))
+```
+
+## Histogramas 
+
+Índice de elementos de la especie versicolor
+
+```{r}
+# Opción A
+
+indice_versicolor <- Species == 'versicolor'
+
+hist(Sepal.Length[indice_versicolor])
+
+# Opción B
+
+sl_versicolor <- subset(Sepal.Length, Species == 'versicolor')
+
+hist(sl_versicolor)
+```
+
+## Gráficos agrupados y exportación
+
+```{r}
+#jpeg('histogramas.jpg')
+
+par(mfrow = c(1, 2)) # Definir plantilla de gráficos
+
+hist(Sepal.Length)
+
+hist(Sepal.Length[indice_versicolor])
+
+#dev.off() # Cerrar el dispositivo gráfico o imagen
+```
+
+## Diagramas de cajas
+
+```{r}
+# hacer boxplot usando ggplot2
+boxplot(Sepal.Length ~ Species)
+```
+
+## Diagramas de barras
+
+```{r}
+bar1_data <- read.table('data/bar1_data.csv',
+                        sep = ',',
+                        header = T)
+```
+
+```{r}
+barplot(bar1_data$value, names.arg = factor(bar1_data$Site))
+```
+
+## Gráficos de regresión
+
+```{r}
+lm_pl_sl <- lm(Petal.Length ~ Sepal.Length)
+
+summary(lm_pl_sl)
+
+# plot(lm_pl_sl) # Gráficos secuenciales
+```
+
+```{r}
+par(mfrow=c(2,2)) # Agrupar gráficos
+
+plot(lm_pl_sl)
+```
+
+# Gráficos con ggplot2
+
+[Manual de ggplot2 online](https://ggplot2.tidyverse.org/reference/)
+
+## Regresión lineal 
+
+```{r}
+require(ggplot2)
+
+c <- ggplot(iris, aes(y = Petal.Length, x = Sepal.Length))
+
+c + stat_smooth(method = lm, colour = "black") + geom_point(aes(col = factor(Species)))
+
+# ggsave('iris_lm.png') # guardar gráfico
+```
+
+## Gráfico de barras 
+
+```{r}
+c <- ggplot(bar1_data, aes(x = factor(Site), y = value))
+
+c + geom_bar(stat = "identity")
+# ggsave('bar1.png')
+```
+
+## Gráfico de barras agrupadas 
+
+**Ejercicio: lee el archivo 'data/bar2_data.csv'**
+
+```{r, echo=FALSE}
+bar2_data <- read.table('data/bar2_data.csv',
+                        sep = '|',
+                        header = T)
+```
+
+```{r}
+c <- ggplot(bar2_data, aes(x = factor(Site), value))
+
+c + geom_bar(stat='identity',position = position_dodge2(preserve = "single"), aes(fill = factor(year)))
+
+# añadir ejemplo de uso de facet_wrap!
+
+# ggsave('bar2.png')
+```
+
+## Preparar datos para ggplot2
+
+```{r}
+data<-read.table('data/data.csv', sep = '\t', header = T)
+```
+
+```{r}
+library(reshape)
+
+head(data)
+
+data_ggplot2 <- melt(data, id = c('site'))
+
+data_ggplot2
+```
